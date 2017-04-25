@@ -38,7 +38,6 @@ public class HJListeningProcessor {
 	}
 	
 	public static void download(String fileName, String downloadURL) throws MalformedURLException {
-		int bytesum = 0;
         int byteread = 0;
 
         URL url = new URL(downloadURL);
@@ -49,11 +48,10 @@ public class HJListeningProcessor {
             FileOutputStream fs = new FileOutputStream("F:/HJListening/" + fileName);
 
             byte[] buffer = new byte[1204];
-            int length;
             while ((byteread = inStream.read(buffer)) != -1) {
-                bytesum += byteread;
                 fs.write(buffer, 0, byteread);
             }
+            fs.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -62,21 +60,16 @@ public class HJListeningProcessor {
 	}
 	
 	public static void updateDownloadUrl(ApplicationContext applicationContext) throws Exception {
-		String result = getDownLoadUrl("http://ting.hujiang.com/n2zhenti/15103062946");
-		
 		downloadHJListeningMapper = applicationContext.getBean(DownloadHJListeningMapper.class);
 		List<DownloadHJListening> downloadHJListenings = downloadHJListeningMapper.selectByExample(new DownloadHJListeningExample());
 		
-		int i = 0;
 		for(DownloadHJListening downloadHJListening : downloadHJListenings) {
 			downloadHJListening.setDownload_url(getDownLoadUrl(downloadHJListening.getDownload_url()));
 			downloadHJListeningMapper.updateByPrimaryKey(downloadHJListening);
-			System.out.println("u" + i++);
 		}
 	}
 	
-	public static String getDownLoadUrl(String urlStr) throws Exception  
-    {  
+	public static String getDownLoadUrl(String urlStr) throws Exception {  
   
         URL url = new URL(urlStr);  
         URLConnection urlConnection = url.openConnection(); // 打开连接  text/html; charset=utf-8
@@ -85,8 +78,7 @@ public class HJListeningProcessor {
         BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8")); // 获取输入流  
         String line = null;  
         StringBuilder sb = new StringBuilder();  
-        while ((line = br.readLine()) != null)  
-        {  
+        while ((line = br.readLine()) != null) {  
             sb.append(line + "\n");  
         }  
         br.close();  
@@ -130,10 +122,6 @@ public class HJListeningProcessor {
 		listeningBOs.addAll(JSON.parseArray(getResultByRequest(requestBody_2, url, "POST"), HJListeningBO.class));
 		
 		return listeningBOs;
-	}
-	
-	public static void main(String[] args) {
-		getHJListeningBOList();
 	}
 
 	private static String getResultByRequest(String requestBody, String url, String type) {

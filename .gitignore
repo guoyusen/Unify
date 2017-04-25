@@ -1,0 +1,7 @@
+/Unify/*/.settings/*
+/Unify/*/bin/*
+/Unify/*/ProjectSTS/*
+/Unify/*/target/*
+/Unify/*/.classpath
+/Unify/*/.project
+/Unify/*/.springBeans
