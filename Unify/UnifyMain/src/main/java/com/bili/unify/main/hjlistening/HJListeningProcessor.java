@@ -39,15 +39,13 @@ public class HJListeningProcessor {
 	
 	public static void download(String fileName, String downloadURL) throws MalformedURLException {
         int byteread = 0;
-
         URL url = new URL(downloadURL);
-
         try {
             URLConnection conn = url.openConnection();
             InputStream inStream = conn.getInputStream();
             FileOutputStream fs = new FileOutputStream("F:/HJListening/" + fileName);
 
-            byte[] buffer = new byte[1204];
+            byte[] buffer = new byte[1024];
             while ((byteread = inStream.read(buffer)) != -1) {
                 fs.write(buffer, 0, byteread);
             }
@@ -70,7 +68,6 @@ public class HJListeningProcessor {
 	}
 	
 	public static String getDownLoadUrl(String urlStr) throws Exception {  
-  
         URL url = new URL(urlStr);  
         URLConnection urlConnection = url.openConnection(); // 打开连接  text/html; charset=utf-8
         urlConnection.setRequestProperty("Content-Type", "text/html; charset=utf-8");
@@ -90,7 +87,6 @@ public class HJListeningProcessor {
     }  
 	
 	public static void saveHJListeningFromNet(ApplicationContext applicationContext) {
-
 		downloadHJListeningMapper = applicationContext.getBean(DownloadHJListeningMapper.class);
 
 		List<HJListeningBO> listeningBOs = getHJListeningBOList();
@@ -104,10 +100,7 @@ public class HJListeningProcessor {
 					"http://ting.hujiang.com/" + hjListeningBO.getTopicAlias() + "/" + hjListeningBO.getLongId());
 
 			downloadHJListeningMapper.insert(downloadHJListening);
-			
 			subIndex++;
-
-			System.out.println(pageIndex + "-" + subIndex);
 			
 			if (subIndex == 8) {
 				subIndex = 1;
