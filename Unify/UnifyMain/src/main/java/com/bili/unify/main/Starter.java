@@ -1,17 +1,16 @@
 package com.bili.unify.main;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.bili.unify.main.hjlistening.HJListeningProcessor;
+import com.bili.unify.utils.SpringContextUtils;
 
 public class Starter {
 
 	private static ApplicationContext applicationContext;
 	
 	public static void main(String[] args) throws Exception {
-		applicationContext = new ClassPathXmlApplicationContext("classpath:spring-mybatis.xml");
-		
+		applicationContext = SpringContextUtils.getApplicationSpringContext("classpath:spring-mybatis.xml");
 		HJListeningProcessor.downloadMP3(applicationContext);
 	}
 	
